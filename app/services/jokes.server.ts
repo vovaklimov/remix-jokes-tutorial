@@ -1,4 +1,4 @@
-import type { Joke } from '@prisma/client';
+import type { Joke, User } from '@prisma/client';
 import { db } from '~/utils/db.server';
 
 export type JokePreview = Pick<Joke, 'id' | 'name'>;
@@ -14,7 +14,7 @@ export async function getJokesPreviews(): Promise<Array<JokePreview>> {
   });
 }
 
-export async function getRandomJoke() {
+export async function getRandomJoke(): Promise<(Joke & { jokester: User }) | undefined> {
   const jokesCount = await db.joke.count();
 
   const jokesToSkip = Math.floor(Math.random() * jokesCount);
